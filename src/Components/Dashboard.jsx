@@ -20,6 +20,12 @@ import {
 import AutoScrollSection from "./AutoScrollSection.jsx";
 
 const Dashboard = () => {
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const [chatOpen, setChatOpen] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+
   useEffect(() => {
     const savedLang = localStorage.getItem("lang") || "en";
     i18n.changeLanguage(savedLang);
