@@ -28,6 +28,31 @@ const ContractForm = ({ contractId, onClose, onContractSaved }) => {
   useEffect(() => {
     setIsVisible(true);
 
+    const fetchContract = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(`${link}/api/contracts/${contractId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) throw new Error("Failed to fetch contract");
+        const data = await response.json();
+
+        setContract({
+          ...data,
+          harvestDate: data.harvestDate
+            ? new Date(data.harvestDate).toISOString().split("T")[0]
+            : "",
+        });
+
+        if (data.contractFile) {
+          setFilePreview(data.contractFile.split("/").pop());
+        }
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
     if (contractId) {
       fetchContract();
     }
